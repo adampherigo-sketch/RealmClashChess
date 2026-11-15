@@ -634,11 +634,11 @@ async function strike(A,capD,cp,cu){A.classList.add('act','atk');
       await r.animate([{transform:at(pos)},{transform:at(nx)}],{duration:(i===hops?460:300)*sp(),easing:'ease-in-out',fill:'forwards'}).finished;
       pos=nx;await wait(i===hops?200:170);}
     for(let i=0;i<3;i++){r.style.opacity=0;await wait(150);r.style.opacity=1;tone(1500,1500,.09,'square',.08);await wait(210);}
-    // pounce: crouch, leap onto the target square, and the beam lands with it
+    // pounce: crouch, leap onto the target square, land with an impact
     if(!cu.pounce){sfx.zap();await laser(cp,700*sp(),cu.beam);return;}
     const P=1300*sp();A.style.setProperty('--pd',P+'ms');A.classList.add('pounce');
     await wait(1300*.2);const g=glide(A,capD,A._at||A._home,1300*.48,'slide');
-    await wait(1300*.36);sfx.zap();await Promise.all([g,laser(cp,700*sp(),cu.beam)]);
+    await g;shake();sfx.hit();burst(cp,{count:44,speed:1.4,colors:[cu.beam[1],cu.beam[2],'#ffffff']});await wait(1300*.32);
   }finally{r.remove();A.classList.remove('atk','pounce');}}
 async function animate(m,prev){
   const A=pieceEls[m.from];if(!A)return;const from=disp(m.from),to=disp(m.to),t=m.piece[1];A._home=from;
