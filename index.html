@@ -32,11 +32,11 @@ h1{font-family:var(--display);font-size:clamp(20px,4vw,30px);margin:0;letter-spa
 .side{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:14px}
 .status{font-family:var(--display);font-size:16px;letter-spacing:.03em;min-height:24px}
 .status small{font-family:var(--body);color:var(--muted);font-size:13px;margin-left:8px;letter-spacing:0}
-.frame{padding:10px;border-radius:10px;background:linear-gradient(135deg,var(--frame),var(--frame2));
+.frame{padding:calc(10px + 6.5%) 10px 10px;border-radius:10px;background:linear-gradient(135deg,var(--frame),var(--frame2));
   box-shadow:0 18px 50px #0009, inset 0 0 0 2px #fff2}
-.board{position:relative;aspect-ratio:1;width:100%;container-type:inline-size;overflow:hidden;border-radius:4px;
+.board{position:relative;aspect-ratio:1;width:100%;container-type:inline-size;
   touch-action:manipulation;cursor:pointer;user-select:none;-webkit-user-select:none}
-.squares{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr)}
+.squares{position:absolute;inset:0;overflow:hidden;border-radius:4px;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr)}
 .sq{position:relative}
 .sq.l{background:var(--sqL)} .sq.d{background:var(--sqD)}
 .sq.last::after{content:"";position:absolute;inset:0;background:color-mix(in srgb,var(--accent) 30%,transparent)}
@@ -49,13 +49,35 @@ h1{font-family:var(--display);font-size:clamp(20px,4vw,30px);margin:0;letter-spa
 .pieces{position:absolute;inset:0;pointer-events:none}
 .piece{position:absolute;width:12.5%;height:12.5%;display:grid;place-items:center;will-change:transform;z-index:2}
 .piece::before{content:"";position:absolute;left:18%;right:18%;bottom:7%;height:14%;border-radius:50%;background:#0008;filter:blur(1.5px)}
-.fig{position:relative;font-size:9.8cqw;line-height:1;font-family:'Segoe UI Symbol','Noto Sans Symbols2','DejaVu Sans',sans-serif;
-  animation:idle 3.2s ease-in-out infinite}
-.piece.w .fig{color:var(--wInk);text-shadow:0 0 .35cqw var(--wEdge),.25cqw .25cqw 0 var(--wEdge),-.25cqw .25cqw 0 var(--wEdge),0 -.25cqw 0 var(--wEdge),0 0 2.2cqw var(--wGlow)}
-.piece.b .fig{color:var(--bInk);text-shadow:0 0 .35cqw var(--bEdge),.25cqw .25cqw 0 var(--bEdge),-.25cqw .25cqw 0 var(--bEdge),0 -.25cqw 0 var(--bEdge),0 0 2.2cqw var(--bGlow)}
-.piece.act{z-index:5}
-.piece.picked .fig{animation:none;transform:translateY(-8%) scale(1.12)}
-@keyframes idle{50%{transform:translateY(-3%)}}
+.fig{position:absolute;left:-12%;width:124%;bottom:5%;height:165%;transition:transform .15s}
+.fig svg,.mini svg{width:100%;height:100%;display:block;overflow:visible;transform:scaleX(var(--face,1))}
+.piece.act{z-index:30!important}
+.piece.picked .fig{transform:translateY(-7%) scale(1.1)}
+.rig{animation:bob 2.6s ease-in-out infinite;animation-delay:var(--d,0s)}
+.arm,.leg,.mleg,.wing,.robe,.cape,.wpn{transform-box:view-box}
+.arm{transition:transform .16s}
+.arm.l{animation:sway 2.6s ease-in-out infinite;animation-delay:var(--d,0s)}
+.wing{animation:flap 1.4s ease-in-out infinite}
+.glw{animation:pulse 1.6s ease-in-out infinite}
+.hov{animation:hover 1.8s ease-in-out infinite}
+.walk .leg.l,.walk .mleg.a,.walk .arm.r{animation:stepA .34s linear infinite}
+.walk .leg.r,.walk .mleg.b,.walk .arm.l{animation:stepB .34s linear infinite}
+.walk .robe,.walk .cape{animation:swish .34s linear infinite}
+.walk .wing{animation-duration:.3s}
+.atk .arm.r{animation:strike .3s ease-in forwards}
+.atk .wpn:not(.fix),.cast .wpn:not(.fix){transform:rotate(180deg)}
+.cast .arm.r{animation:none;transform:rotate(-155deg)}
+.cast .arm.l{animation:none;transform:rotate(150deg)}
+.cast .glw{animation-duration:.25s}
+@keyframes bob{50%{transform:translateY(-1.8px)}}
+@keyframes sway{50%{transform:rotate(6deg)}}
+@keyframes flap{50%{transform:rotate(22deg)}}
+@keyframes pulse{50%{opacity:.55}}
+@keyframes hover{50%{transform:translateY(-3px)}}
+@keyframes stepA{0%,100%{transform:rotate(26deg)}50%{transform:rotate(-26deg)}}
+@keyframes stepB{0%,100%{transform:rotate(-26deg)}50%{transform:rotate(26deg)}}
+@keyframes swish{0%,100%{transform:skewX(5deg)}50%{transform:skewX(-5deg)}}
+@keyframes strike{0%{transform:rotate(0)}55%{transform:rotate(-175deg)}100%{transform:rotate(-80deg)}}
 canvas.fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:6}
 .callout{position:absolute;left:50%;top:6%;transform:translateX(-50%);z-index:7;pointer-events:none;
   font-family:var(--display);font-size:clamp(11px,3.4cqw,20px);letter-spacing:.04em;white-space:nowrap;max-width:94%;overflow:hidden;text-overflow:ellipsis;
@@ -66,7 +88,8 @@ canvas.fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z
 .card h2{font-family:var(--display);margin:0 0 6px;font-size:clamp(18px,5cqw,28px);color:var(--accent);text-wrap:balance}
 .card p{margin:0 0 12px;color:var(--muted)}
 .promo{display:flex;gap:8px;justify-content:center}
-.promo button{font-size:9cqw;line-height:1;width:1.5em;height:1.5em;padding:0}
+.promo button{width:15cqw;height:19cqw;padding:2px}
+.mini{display:block;width:100%;height:100%}
 button.btn,.promo button,.field button{font-family:var(--body);font-weight:600;font-size:14px;padding:8px 14px;border-radius:7px;
   border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 70%,var(--fg) 8%);color:var(--fg);cursor:pointer}
 button.btn.pri{background:var(--accent);border-color:var(--accent);color:#111}
@@ -87,9 +110,9 @@ section h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.12em
 .note{color:var(--muted);font-size:13px;margin:0}
 .moves{max-height:190px;overflow:auto;display:grid;grid-template-columns:2.4em 1fr 1fr;gap:2px 8px;font-variant-numeric:tabular-nums;font-size:14px}
 .moves b{color:var(--muted);font-weight:400}
-.cast{display:grid;grid-template-columns:1.6em 1fr;gap:3px 8px;font-size:13.5px;margin:0}
-.cast dt{font-size:17px;line-height:1.1} .cast dd{margin:0;color:var(--fg)}
-@media (prefers-reduced-motion:reduce){.fig{animation:none}}
+.cast{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13.5px;margin:0;align-items:center}
+.cast dt{display:flex;gap:2px} .cast dt .mini{width:30px;height:38px} .cast dd{margin:0;color:var(--fg)}
+@media (prefers-reduced-motion:reduce){.rig,.arm.l,.wing,.glw,.hov{animation:none}}
 </style>
 
 <div class="wrap">
@@ -192,6 +215,94 @@ const GLYPH={k:'♚︎',q:'♛︎',r:'♜︎',b:'♝︎',n:'♞︎',p:'♟︎'};
 const VERB={p:'jabs',n:'rides down',b:'blasts',r:'crushes',q:'obliterates',k:'strikes down'};
 const $=id=>document.getElementById(id);
 
+
+/* ───────────── Character rigs (drawn in code; one jointed figure per piece, re-dressed per realm and side) ───────────── */
+const PAL={
+  temporal:{w:{a:'#2f6fb8',b:'#f6c35b',skin:'#f0c9a0',metal:'#7c5f2e',glow:'#7fe7ff',hair:'#5a3a1a',face:'human',mount:'#c79a45'},
+            b:{a:'#59606e',b:'#ff5a3c',skin:'#aab2c0',metal:'#3b404c',glow:'#ff5a3c',hair:'#3b404c',face:'robot',mount:'#4a505c'}},
+  armada:{w:{a:'#2c6fd6',b:'#e9eef7',skin:'#e8b98f',metal:'#39435a',glow:'#4fb3ff',hair:'#2b2118',face:'human',mount:'#c9d2e2'},
+          b:{a:'#7a1f1f',b:'#d9a441',skin:'#6fbf6a',metal:'#2c2f38',glow:'#3dff6e',hair:'#7a1f1f',face:'alien',mount:'#4c5a3a'}},
+  dungeon:{w:{a:'#b33a2e',b:'#e0a93b',skin:'#eac39a',metal:'#aab2bd',glow:'#ffd27a',hair:'#6a4320',face:'human',mount:'#f1e6d2'},
+           b:{a:'#3a2a3f',b:'#7d8a4a',skin:'#e9e4d0',metal:'#5b5560',glow:'#7dff6a',hair:'#3a2a3f',face:'skull',mount:'#2c2430'}},
+  arcane:{w:{a:'#f4ecd0',b:'#d9b45a',skin:'#e6bd95',metal:'#b8902f',glow:'#ffd24a',hair:'#8a5a2a',face:'human',mount:'#e9d9a0'},
+          b:{a:'#2a1c44',b:'#b060ff',skin:'#3b2d55',metal:'#6d5290',glow:'#d7b0ff',hair:'#2a1c44',face:'shade',mount:'#4a3566'}}};
+const SPEC={
+  temporal:{p:{gear:'goggles',wpn:'rod'},n:{mount:'hover',gear:'goggles',wpn:'spear'},b:{gear:'hood',wpn:'staff',robe:1},q:{gear:'tiara',wpn:'orb',robe:1,cape:1},k:{gear:'crown',wpn:'rod',cape:1}},
+  armada:{p:{gear:'none',wpn:'blaster'},n:{mount:'hover',gear:'cap',wpn:'blaster'},b:{gear:'goggles',wpn:'orb'},q:{gear:'cap',wpn:'blaster',cape:1},k:{gear:'cap',wpn:'sword',cape:1}},
+  dungeon:{p:{gear:'helmet',wpn:'spear'},n:{mount:'horse',gear:'helmet',wpn:'spear'},b:{gear:'wizard',wpn:'staff',robe:1},q:{gear:'tiara',wpn:'wand',robe:1,cape:1},k:{gear:'crown',wpn:'sword',cape:1}},
+  arcane:{p:{gear:'hood',wpn:'wand',robe:1},n:{mount:'griffin',gear:'hood',wpn:'wand'},b:{gear:'wizard',wpn:'staff',robe:1},q:{gear:'tiara',wpn:'orb',robe:1,cape:1},k:{gear:'crown',wpn:'scepter',robe:1,cape:1}}};
+const SIZE={p:.76,n:1,b:.95,r:1,q:1,k:1.07};
+const OL='stroke="#0b0b14" stroke-width="1.6" stroke-linejoin="round"';
+function weapon(w,P){const g=`fill="${P.glow}"`;
+  if(w==='spear')return `<g class="wpn" style="transform-origin:15px -42px"><line x1="15" y1="-28" x2="15" y2="-92" stroke="#7a5a34" stroke-width="3"/><path d="M11,-90 L15,-104 L19,-90Z" fill="#d5dbe4" ${OL}/></g>`;
+  if(w==='sword')return `<g class="wpn" style="transform-origin:15px -42px"><path d="M13,-48 V-84 L15,-91 L17,-84 V-48Z" fill="#dfe6ee" ${OL}/><rect x="8.5" y="-49" width="13" height="3.5" rx="1.5" fill="${P.b}" ${OL}/></g>`;
+  if(w==='staff')return `<g class="wpn" style="transform-origin:15px -42px"><line x1="15" y1="-20" x2="15" y2="-92" stroke="#6b4a2a" stroke-width="3.2"/><circle class="glw" cx="15" cy="-97" r="6" ${g} ${OL}/></g>`;
+  if(w==='rod')return `<g class="wpn" style="transform-origin:15px -42px"><rect x="13.2" y="-66" width="3.6" height="30" rx="1.8" fill="${P.b}" ${OL}/><circle class="glw" cx="15" cy="-69" r="4.2" ${g} ${OL}/></g>`;
+  if(w==='wand')return `<g class="wpn" style="transform-origin:15px -42px"><line x1="15" y1="-40" x2="15" y2="-66" stroke="#3a2a1a" stroke-width="2.6"/><circle class="glw" cx="15" cy="-68" r="3.8" ${g} ${OL}/></g>`;
+  if(w==='scepter')return `<g class="wpn" style="transform-origin:15px -42px"><line x1="15" y1="-30" x2="15" y2="-82" stroke="${P.b}" stroke-width="3"/><path class="glw" d="M15,-98 L20.5,-89 L15,-80 L9.5,-89Z" ${g} ${OL}/></g>`;
+  if(w==='blaster')return `<g class="wpn fix"><path d="M11.5,-41 h7 v15 h-2.5 v6 h-2.2 v-6 h-2.3z" fill="#2b2f3a" ${OL}/><rect class="glw" x="13.6" y="-21" width="2.8" height="3" ${g}/></g>`;
+  return `<g class="wpn fix"><circle cx="15" cy="-35" r="10" ${g} opacity=".25"/><circle class="glw" cx="15" cy="-35" r="6" ${g} ${OL}/></g>`;}
+function headOf(P,gear){let o='<g class="head">';
+  if(P.face==='robot'){o+=`<line x1="0" y1="-94" x2="0" y2="-102" stroke="${P.metal}" stroke-width="2"/><circle class="glw" cx="0" cy="-103" r="2.4" fill="${P.glow}"/><rect x="-11" y="-95" width="22" height="22" rx="5" fill="${P.skin}" ${OL}/><rect class="glw" x="-8" y="-88" width="16" height="5" rx="2" fill="${P.glow}"/><path d="M-5,-78 h10 M-5,-76 h10" stroke="${P.metal}" stroke-width="1.2"/>`;}
+  else{o+=`<circle cx="0" cy="-83" r="11.5" fill="${P.skin}" ${OL}/>`;
+    if(P.face==='human')o+=`<path d="M-11.5,-85 Q-11,-97 0,-95.5 Q11,-97 11.5,-85 Q0,-92 -11.5,-85Z" fill="${P.hair}"/><circle cx="-4" cy="-83" r="1.6" fill="#1a1a22"/><circle cx="4" cy="-83" r="1.6" fill="#1a1a22"/><path d="M-3,-77.5 Q0,-75.5 3,-77.5" fill="none" stroke="#1a1a22" stroke-width="1.1"/>`;
+    else if(P.face==='skull')o+=`<circle cx="-4.2" cy="-84" r="3.2" fill="#15131a"/><circle cx="4.2" cy="-84" r="3.2" fill="#15131a"/><circle class="glw" cx="-4.2" cy="-84" r="1.1" fill="${P.glow}"/><circle class="glw" cx="4.2" cy="-84" r="1.1" fill="${P.glow}"/><path d="M0,-80 l-1.6,3 h3.2z" fill="#15131a"/><path d="M-5,-75 h10 M-2.5,-76.5 v3 M0,-76.5 v3 M2.5,-76.5 v3" stroke="#15131a" stroke-width="1"/>`;
+    else if(P.face==='alien')o+=`<path d="M-7,-93 L-5,-101 L-2,-94 L0,-103 L2,-94 L5,-101 L7,-93Z" fill="${P.a}" ${OL}/><path d="M-7,-85 l5,1.6 M7,-85 l-5,1.6" stroke="#ffe24a" stroke-width="2.2" stroke-linecap="round"/><path d="M-3.5,-77 h7" stroke="#16301c" stroke-width="1.3"/><path d="M-3,-77 l-.8,-2.4 M3,-77 l.8,-2.4" stroke="#fff" stroke-width="1.3"/>`;
+    else o+=`<ellipse class="glw" cx="-4" cy="-84" rx="2.4" ry="1.6" fill="${P.glow}"/><ellipse class="glw" cx="4" cy="-84" rx="2.4" ry="1.6" fill="${P.glow}"/>`;}
+  if(gear==='helmet')o+=`<path d="M-12.5,-84 Q-13,-98 0,-98 Q13,-98 12.5,-84Z" fill="${P.metal}" ${OL}/><rect x="-1.5" y="-88" width="3" height="8" fill="${P.metal}" ${OL}/>`;
+  else if(gear==='hood')o+=`<path d="M-14,-75 Q-17,-100 0,-101 Q17,-100 14,-75 Q10,-93 0,-93 Q-10,-93 -14,-75Z" fill="${P.a}" ${OL}/>`;
+  else if(gear==='wizard')o+=`<path d="M-9,-93 L3,-117 L9,-93Z" fill="${P.a}" ${OL}/><path d="M-7.6,-96 L7.8,-96" stroke="${P.b}" stroke-width="2.6"/><ellipse cx="0" cy="-93" rx="16" ry="3.6" fill="${P.a}" ${OL}/>`;
+  else if(gear==='crown')o+=`<path d="M-10,-92 V-104 L-5,-98 L0,-107 L5,-98 L10,-104 V-92Z" fill="#f2c94c" ${OL}/><circle class="glw" cx="0" cy="-96" r="1.8" fill="${P.glow}"/>`;
+  else if(gear==='tiara')o+=`<path d="M-12,-80 Q-17,-62 -13,-52 L-9,-70Z M12,-80 Q17,-62 13,-52 L9,-70Z" fill="${P.hair}" ${OL}/><path d="M-9,-92 L-6,-100 L-3,-95 L0,-104 L3,-95 L6,-100 L9,-92Z" fill="#f2c94c" ${OL}/>`;
+  else if(gear==='cap')o+=`<path d="M-12.5,-89 Q0,-103 12.5,-89 V-86.5 H-12.5Z" fill="${P.a}" ${OL}/><rect x="-12.5" y="-89.5" width="25" height="3" fill="${P.b}" ${OL}/>`;
+  else if(gear==='goggles'&&P.face!=='robot')o+=`<rect x="-12" y="-86" width="24" height="3" fill="#3a2a1a"/><circle cx="-4.5" cy="-84.5" r="4" fill="${P.glow}" stroke="#8a6a34" stroke-width="1.8"/><circle cx="4.5" cy="-84.5" r="4" fill="${P.glow}" stroke="#8a6a34" stroke-width="1.8"/>`;
+  return o+'</g>';}
+function human(P,s,tk,upperOnly){let o='';
+  if(s.cape)o+=`<path class="cape" style="transform-origin:0px -70px" d="M-14,-70 Q-27,-34 -21,-3 L21,-3 Q27,-34 14,-70Z" fill="${P.b}" ${OL}/>`;
+  if(!upperOnly){
+    if(s.robe)o+=`<g class="robe" style="transform-origin:0px -44px"><path d="M-11,-46 L-17,-2 Q0,3 17,-2 L11,-46Z" fill="${P.a}" ${OL}/><path d="M-16,-8 Q0,-3 16,-8" fill="none" stroke="${P.b}" stroke-width="2.6"/></g>`;
+    else for(const x of[-6,6])o+=`<g class="leg ${x<0?'l':'r'}" style="transform-origin:${x}px -40px"><rect x="${x-4.5}" y="-42" width="9" height="37" rx="3" fill="${P.metal}" ${OL}/><path d="M${x-6},-1 h12 v-5 q-6,-4 -12,0z" fill="#22222c" ${OL}/></g>`;}
+  o+=`<g class="arm l" style="transform-origin:-14px -66px"><rect x="-19" y="-69" width="8" height="28" rx="4" fill="${P.a}" ${OL}/><circle cx="-15" cy="-42" r="4" fill="${P.skin}" ${OL}/></g>`;
+  o+=`<rect x="-13" y="-72" width="26" height="34" rx="7" fill="${P.a}" ${OL}/><rect x="-13" y="-48" width="26" height="5" fill="${P.b}" ${OL}/>`;
+  o+=tk==='temporal'?`<circle cx="0" cy="-60" r="4.5" fill="#0b0b14" stroke="${P.b}" stroke-width="1.8"/><path d="M0,-60 v-3 M0,-60 h2.4" stroke="${P.glow}" stroke-width="1.2"/>`
+    :tk==='armada'?`<circle cx="0" cy="-61" r="4" fill="${P.b}" ${OL}/><circle cx="0" cy="-61" r="1.6" fill="${P.a}"/>`
+    :tk==='dungeon'?`<rect x="-3" y="-71" width="6" height="23" fill="${P.b}"/>`
+    :`<path class="glw" d="M0,-67 L4.5,-60 L0,-53 L-4.5,-60Z" fill="${P.glow}" ${OL}/>`;
+  o+=headOf(P,s.gear);
+  o+=`<g class="arm r" style="transform-origin:14px -66px">${weapon(s.wpn,P)}<rect x="11" y="-69" width="8" height="28" rx="4" fill="${P.a}" ${OL}/><circle cx="15" cy="-42" r="4" fill="${P.skin}" ${OL}/></g>`;
+  return o;}
+function construct(P,tk){let o='';const body=tk==='arcane'?P.a:tk==='armada'?P.mount:tk==='temporal'?P.mount:P.metal;
+  for(const x of[-12,12])o+=`<g class="leg ${x<0?'l':'r'}" style="transform-origin:${x}px -18px"><rect x="${x-7}" y="-20" width="14" height="19" rx="3" fill="${P.metal}" ${OL}/></g>`;
+  o+=`<g class="arm l" style="transform-origin:-27px -62px"><rect x="-35" y="-66" width="11" height="36" rx="5" fill="${body}" ${OL}/><circle cx="-29.5" cy="-29" r="7" fill="${P.metal}" ${OL}/></g>`;
+  o+=`<rect x="-24" y="-82" width="48" height="66" rx="4" fill="${body}" ${OL}/>`;
+  if(tk==='armada')o+=`<path d="M-14,-82 Q0,-104 14,-82Z" fill="${P.a}" ${OL}/><line x1="0" y1="-93" x2="0" y2="-108" stroke="${P.metal}" stroke-width="2"/><circle class="glw" cx="0" cy="-109" r="2.6" fill="${P.glow}"/>`+[-52,-40,-28].map(y=>`<path class="glw" d="M-18,${y} h8 M-4,${y} h8 M10,${y} h8" stroke="${P.glow}" stroke-width="3.2"/>`).join('');
+  else o+=[-24,-7,10].map(x=>`<rect x="${x}" y="-93" width="14" height="13" fill="${body}" ${OL}/>`).join('');
+  o+=`<rect class="glw" x="-15" y="-72" width="10" height="5.5" rx="1.5" fill="${P.glow}"/><rect class="glw" x="5" y="-72" width="10" height="5.5" rx="1.5" fill="${P.glow}"/>`;
+  if(tk==='temporal')o+=`<circle cx="0" cy="-42" r="14" fill="#f4ecd0" stroke="${P.b}" stroke-width="3"/><path d="M0,-42 V-52 M0,-42 L7,-38" stroke="#1a1a22" stroke-width="2.2" stroke-linecap="round"/>`;
+  else if(tk==='dungeon')o+=`<path d="M-20,-58 l8,6 l-4,9 l9,7 M20,-50 l-7,5 l3,8" fill="none" stroke="#2c2830" stroke-width="1.6"/><path d="M-10,-30 h20 l-3,6 h-14z" fill="#1c1a20" ${OL}/><rect x="-24" y="-22" width="48" height="6" fill="${P.a}" ${OL}/>`;
+  else if(tk==='arcane')o+=`<path class="glw" d="M-12,-52 l5,7 l-5,7 l-5,-7z M12,-52 l5,7 l-5,7 l-5,-7z" fill="${P.glow}"/><circle class="glw" cx="0" cy="-30" r="6" fill="none" stroke="${P.glow}" stroke-width="2.4"/><path class="glw" d="M0,-60 v10" stroke="${P.glow}" stroke-width="2.4"/>`;
+  o+=`<g class="arm r" style="transform-origin:27px -62px"><rect x="24" y="-66" width="11" height="36" rx="5" fill="${body}" ${OL}/><circle cx="29.5" cy="-29" r="7" fill="${P.metal}" ${OL}/></g>`;
+  return o;}
+function mounted(P,s,tk){let o='';const rider=`<g transform="translate(-3,-17) scale(.62)">${human(P,s,tk,true)}</g>`,c=P.mount;
+  if(s.mount==='hover'){
+    o+=`<ellipse class="glw" cx="0" cy="-5" rx="20" ry="4.5" fill="${P.glow}" opacity=".7"/><g class="hov">`;
+    o+=`<path d="M-30,-30 L-38,-44 L-24,-36Z" fill="${P.a}" ${OL}/>${rider}<path d="M-30,-27 Q-30,-39 -13,-39 L14,-39 Q33,-37 36,-27 Q31,-16 14,-16 L-15,-16 Q-30,-16 -30,-27Z" fill="${c}" ${OL}/><path d="M12,-38 Q28,-36 33,-28 L16,-28Z" fill="${P.glow}" opacity=".75" ${OL}/><path d="M-28,-24 H30" stroke="${P.b}" stroke-width="3"/><circle class="glw" cx="-27" cy="-27" r="3.4" fill="${P.glow}"/></g>`;
+    return o;}
+  const g=s.mount==='griffin';
+  o+=`<path d="M-22,-36 Q-38,-32 -33,-12" fill="none" stroke="${g?P.b:P.hair}" stroke-width="5" stroke-linecap="round"/>`;
+  for(const[x,k]of[[-17,'a'],[-9,'b']])o+=`<g class="mleg ${k}" style="transform-origin:${x}px -26px"><rect x="${x-3}" y="-28" width="6" height="26" rx="2.5" fill="${c}" ${OL}/><rect x="${x-3.5}" y="-5" width="7" height="5" rx="1.5" fill="#1c1a20"/></g>`;
+  if(g)o+=`<path class="wing" style="transform-origin:-4px -42px" d="M-4,-42 Q-34,-84 -46,-54 Q-32,-58 -26,-46 Q-18,-50 -4,-34Z" fill="${P.b}" ${OL}/>`;
+  o+=`<ellipse cx="0" cy="-33" rx="24" ry="12" fill="${c}" ${OL}/>${rider}`;
+  for(const[x,k]of[[10,'b'],[18,'a']])o+=`<g class="mleg ${k}" style="transform-origin:${x}px -26px"><rect x="${x-3}" y="-28" width="6" height="26" rx="2.5" fill="${c}" ${OL}/><rect x="${x-3.5}" y="-5" width="7" height="5" rx="1.5" fill="#1c1a20"/></g>`;
+  o+=`<path d="M12,-38 L21,-63 Q24,-72 32,-67 L41,-57 Q42,-52 37,-51 L30,-55 L27,-33Z" fill="${c}" ${OL}/><path d="M24,-70 l1,-7 l5,5z" fill="${c}" ${OL}/><circle cx="31" cy="-62" r="1.7" fill="#15131a"/>`;
+  o+=g?`<path d="M38,-58 L47,-53 L38,-51Z" fill="#f2c94c" ${OL}/>`:`<path d="M14,-42 L22,-64" stroke="${P.hair}" stroke-width="4" stroke-linecap="round"/>`;
+  return o;}
+const svgCache={};
+function charSVG(tk,piece){const key=tk+piece;if(svgCache[key])return svgCache[key];
+  const P=PAL[tk][piece[0]],t=piece[1],s=SPEC[tk][t]||{},z=SIZE[t];
+  const inner=t==='r'?construct(P,tk):t==='n'?mounted(P,s,tk):human(P,s,tk);
+  return svgCache[key]=`<svg viewBox="-42 -120 84 126" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><g class="rig"><g transform="scale(${t==='k'?z*1.08:z},${z})">${inner}</g></g></svg>`;}
+
 /* ───────────── Chess rules ───────────── */
 const idx=(r,f)=>r*8+f, rf=i=>[i>>3,i&7], inB=(r,f)=>r>=0&&r<8&&f>=0&&f<8;
 const KN=[[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
@@ -277,8 +388,9 @@ function render(){
     squaresEl.append(d);}
   piecesEl.textContent='';pieceEls={};
   state.b.forEach((p,sq)=>{if(!p)return;const el=document.createElement('div'),g=document.createElement('span'),{x,y}=disp(sq);
-    el.className='piece '+p[0]+(sq===sel?' picked':'');el.style.left=x*12.5+'%';el.style.top=y*12.5+'%';
-    g.className='fig';g.textContent=GLYPH[p[1]];g.style.animationDelay=(-(sq*37%32)/10)+'s';el.append(g);piecesEl.append(el);pieceEls[sq]=el;});
+    el.className='piece '+p[0]+(sq===sel?' picked':'');el.style.left=x*12.5+'%';el.style.top=y*12.5+'%';el.style.zIndex=2+y;
+    el.style.setProperty('--face',p[0]==='w'?1:-1);el.style.setProperty('--d',(-(sq*37%26)/10)+'s');
+    g.className='fig';g.innerHTML=charSVG(themeKey,p);el.append(g);piecesEl.append(el);pieceEls[sq]=el;});
   renderInfo();}
 function renderInfo(){
   const t=T(),side=c=>t.sides[c];let h;
@@ -302,9 +414,9 @@ function applyTheme(k){themeKey=k;const t=T(),st=document.documentElement.style;
   for(const[key,v]of Object.entries(t.css))st.setProperty('--'+key,v);
   document.querySelectorAll('#themes button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
   $('castTitle').textContent=`Cast: ${t.sides.w} vs ${t.sides.b}`;
-  $('cast').innerHTML='kqrbnp'.split('').map(c=>`<dt>${GLYPH[c]}</dt><dd>${t.names[c]}</dd>`).join('');
+  $('cast').innerHTML='kqrbnp'.split('').map(c=>`<dt><span class="mini">${charSVG(k,'w'+c)}</span><span class="mini" style="--face:-1">${charSVG(k,'b'+c)}</span></dt><dd>${t.names[c]}</dd>`).join('');
   try{localStorage.setItem('rcc-theme',k);}catch(e){}
-  renderInfo();}
+  if(busy)renderInfo();else render();}
 
 /* ───────────── Effects canvas ───────────── */
 const cv=$('fx'),cx=cv.getContext('2d');let W=0,parts=[],drawers=[],raf=0;
@@ -361,14 +473,16 @@ function glide(el,to,from,dur,style){ // to/from in display squares; el sits at 
   const h=el._home,cur=el._at||h,dx=(to.x-h.x)*100,dy=(to.y-h.y)*100,cxp=(cur.x-h.x)*100,cyp=(cur.y-h.y)*100,kf=[];
   const n=style==='leap'?10:Math.max(2,Math.round(Math.hypot(to.x-cur.x,to.y-cur.y)*2)*2);
   for(let i=0;i<=n;i++){const k=i/n,lift=style==='leap'?-Math.sin(k*Math.PI)*70:(style==='walk'&&i%2?-10:0),
-    sc=style==='leap'?1+Math.sin(k*Math.PI)*.35:1,tilt=style==='walk'?(i%2?4:-4)*(i&&i<n?1:0):0;
-    kf.push({transform:`translate(${cxp+(dx-cxp)*k}%,${cyp+(dy-cyp)*k+lift}%) scale(${sc}) rotate(${tilt}deg)`});}
+    sc=style==='leap'?1+Math.sin(k*Math.PI)*.35:1;
+    kf.push({transform:`translate(${cxp+(dx-cxp)*k}%,${cyp+(dy-cyp)*k+lift}%) scale(${sc})`});}
+  if(style!=='slide'){face(el,to.x-cur.x);el.classList.add('walk');}
   el._at=to;el.classList.add('act');
   if(style==='walk')for(let i=1;i<n;i+=2)setTimeout(sfx.step,dur*sp()*i/n);
-  return el.animate(kf,{duration:dur*sp(),easing:style==='leap'?'ease-in-out':'linear',fill:'forwards'}).finished;}
+  return el.animate(kf,{duration:dur*sp(),easing:style==='leap'?'ease-in-out':'linear',fill:'forwards'}).finished.then(()=>el.classList.remove('walk'));}
+const face=(el,dx)=>{if(Math.abs(dx)>.01)el.style.setProperty('--face',dx>0?1:-1);};
 const shake=()=>boardEl.animate([{transform:'translate(0,0)'},{transform:'translate(-1%,.6%)'},{transform:'translate(1%,-.6%)'},{transform:'translate(-.6%,-.4%)'},{transform:'translate(0,0)'}],{duration:260});
 function callout(txt){const c=$('callout');c.textContent=txt;c.classList.add('on');clearTimeout(c._t);c._t=setTimeout(()=>c.classList.remove('on'),1900*sp());}
-async function die(el,pt){const d=T().fx.death,fig=el.firstChild;sfx.die();fig.style.animation='none';
+async function die(el,pt){const d=T().fx.death,fig=el.firstChild;sfx.die();
   await fig.animate([{transform:'translateX(0)',filter:'brightness(3)'},{transform:'translateX(-9%)'},{transform:'translateX(9%)'},{transform:'translateX(-6%)'},{transform:'translateX(0)',filter:'brightness(1)'}],{duration:300*sp()}).finished;
   let kf;
   if(d==='swirl'){kf=[{transform:'rotate(0) scale(1)',opacity:1},{transform:'rotate(720deg) scale(0)',opacity:0}];burst(pt,{count:34,shape:'ring',speed:.7});burst(pt,{count:20,shape:'dot'});}
@@ -385,19 +499,20 @@ async function animate(m,prev){
     await Promise.all([glide(A,to,from,420,'walk'),glide(R,disp(rTo),R._home,420,'walk')]);return;}
   if(m.cap<0){await glide(A,to,from,mvDur,mvStyle);if(m.promo){burst(center(to),{count:40});sfx.zap();callout(`${pname(m.piece)} ascends to ${T().names[m.promo]}`);await wait(350);}return;}
   const D=pieceEls[m.cap],capD=disp(m.cap),cp=center(capD),victim=prev.b[m.cap];
-  callout(`${pname(m.piece)} ${VERB[t]} ${pname(victim)}`);
+  callout(`${pname(m.piece)} ${VERB[t]} ${pname(victim)}`);face(A,capD.x-from.x);face(D,from.x-capD.x);
   if(t==='b'||t==='q'){ // ranged: charge, fire, then walk in
-    const fig=A.firstChild;A.classList.add('act');burst(center(from),{count:14,speed:.4,life:.7});
+    const fig=A.firstChild;A.classList.add('act','cast');burst(center(from),{count:14,speed:.4,life:.7});
     await fig.animate([{transform:'scale(1)',filter:'brightness(1)'},{transform:'scale(1.25)',filter:'brightness(2.2)'},{transform:'scale(1)',filter:'brightness(1)'}],{duration:480*sp()}).finished;
     sfx.zap();await beam(center(from),cp,(t==='q'?520:400)*sp());
     if(t==='q'){burst(cp,{count:50,speed:1.5});shake();}
+    A.classList.remove('cast');
   }else{ // melee: close in, wind up, strike
     const ux=(capD.x-from.x)/(dist||1),uy=(capD.y-from.y)/(dist||1),near={x:capD.x-ux*.62,y:capD.y-uy*.62};
     if(dist>.9)await glide(A,near,from,t==='n'?520:120+dist*120,mvStyle);
     const at=A._at||from,back={x:at.x-ux*.25,y:at.y-uy*.25},hitp={x:capD.x-ux*.3,y:capD.y-uy*.3};
-    await glide(A,back,at,170,'slide');await glide(A,hitp,back,90,'slide');
+    A.classList.add('atk');await glide(A,back,at,170,'slide');await glide(A,hitp,back,90,'slide');
     if(t==='r'||t==='k')shake();
-    await glide(A,near,hitp,140,'slide');}
+    await glide(A,near,hitp,140,'slide');A.classList.remove('atk');}
   sfx.hit();burst(cp,{count:30});
   await die(D,cp);
   await glide(A,to,A._at||from,180+Math.hypot(to.x-(A._at||from).x,to.y-(A._at||from).y)*110,'walk');
@@ -417,7 +532,7 @@ async function play(m,broadcast){
   else if(inCheck(state,state.turn))callout(`${T().names.k} is under attack`);}
 function canMove(){return !busy&&!result&&(mode==='local'||(net.code&&net.color===state.turn));}
 function choosePromo(color){return new Promise(res=>{const o=document.createElement('div');o.className='overlay';
-  o.innerHTML=`<div class="card"><p>Promote to</p><div class="promo">${'qrbn'.split('').map(c=>`<button data-p="${c}" aria-label="${T().names[c]}">${GLYPH[c]}</button>`).join('')}</div></div>`;
+  o.innerHTML=`<div class="card"><p>Promote to</p><div class="promo">${'qrbn'.split('').map(c=>`<button data-p="${c}" aria-label="${T().names[c]}"><span class="mini" style="pointer-events:none">${charSVG(themeKey,color+c)}</span></button>`).join('')}</div></div>`;
   o.onclick=e=>{e.stopPropagation();const b=e.target.closest('button');o.remove();res(b?b.dataset.p:null);};boardEl.append(o);});}
 boardEl.addEventListener('click',async e=>{
   if(e.target.closest('.overlay'))return;
