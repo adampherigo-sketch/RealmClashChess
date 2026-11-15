@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="140 40 400 400" width="400" height="400" role="img"><title>Legal move marker</title><style>
+.ant{transform-origin:340px 104px;animation:wig 2.4s ease-in-out infinite}
+.earL{transform-origin:292px 116px;animation:earL 3s ease-in-out infinite}
+.earR{transform-origin:388px 116px;animation:earR 3s ease-in-out infinite}
+.tail{transform-origin:392px 372px;animation:wag .5s ease-in-out infinite alternate}
+.eye{animation:look var(--scan,1.8s) ease-in-out infinite alternate}
+.b{animation:blink 1.2s steps(1) infinite}.d1{animation-delay:.4s}.d2{animation-delay:.8s}
+.tip{animation:blink 1.6s steps(1) infinite}
+.core{transform-origin:340px 336px;animation:pulse 2s ease-in-out infinite}
+@keyframes wig{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@keyframes earL{0%,80%,100%{transform:rotate(0)}88%{transform:rotate(14deg)}}
+@keyframes earR{0%,30%,50%,100%{transform:rotate(0)}40%{transform:rotate(-14deg)}}
+@keyframes wag{from{transform:rotate(-14deg)}to{transform:rotate(16deg)}}
+@keyframes look{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
+@keyframes blink{0%,55%{opacity:1}56%,100%{opacity:.18}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.h{transform-origin:340px 240px;animation:pulse 1.4s ease-in-out infinite}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style><circle class="h" cx="340" cy="240" r="38" fill="#B388FF" opacity=".85"/><circle cx="340" cy="240" r="16" fill="#E2D4FF"/></svg>

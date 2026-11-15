@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="135 20 410 430" width="410" height="430" role="img"><title>Black pup pawn idle</title><style>
+.ant{transform-origin:340px 104px;animation:wig 2.4s ease-in-out infinite}
+.earL{transform-origin:292px 116px;animation:earL 3s ease-in-out infinite}
+.earR{transform-origin:388px 116px;animation:earR 3s ease-in-out infinite}
+.tail{transform-origin:392px 372px;animation:wag .5s ease-in-out infinite alternate}
+.eye{animation:look var(--scan,1.8s) ease-in-out infinite alternate}
+.b{animation:blink 1.2s steps(1) infinite}.d1{animation-delay:.4s}.d2{animation-delay:.8s}
+.tip{animation:blink 1.6s steps(1) infinite}
+.core{transform-origin:340px 336px;animation:pulse 2s ease-in-out infinite}
+@keyframes wig{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@keyframes earL{0%,80%,100%{transform:rotate(0)}88%{transform:rotate(14deg)}}
+@keyframes earR{0%,30%,50%,100%{transform:rotate(0)}40%{transform:rotate(-14deg)}}
+@keyframes wag{from{transform:rotate(-14deg)}to{transform:rotate(16deg)}}
+@keyframes look{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
+@keyframes blink{0%,55%{opacity:1}56%,100%{opacity:.18}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style><ellipse cx="340" cy="436" rx="116" ry="9" fill="#000" opacity=".18"/>
+<g class="tail"><path d="M392 372 Q430 360 428 318" stroke="#30353C" stroke-width="16" fill="none" stroke-linecap="round"/><circle class="tip" cx="428" cy="314" r="7" fill="#B388FF"/></g>
+<path d="M236 404 L232 424 Q340 446 448 424 L444 404 Z" fill="#1C1F24"/>
+<ellipse cx="340" cy="404" rx="104" ry="18" fill="#2F343B"/>
+<circle class="b" cx="274" cy="424" r="5.5" fill="#B388FF"/><circle class="b d1" cx="340" cy="432" r="5.5" fill="#B388FF"/><circle class="b d2" cx="406" cy="424" r="5.5" fill="#B388FF"/>
+<ellipse cx="288" cy="384" rx="46" ry="28" fill="#30353C"/><ellipse cx="392" cy="384" rx="46" ry="28" fill="#30353C"/>
+<ellipse cx="340" cy="318" rx="62" ry="84" fill="#454B55"/>
+<path d="M290 270 Q282 330 300 390 Q286 360 284 318 Q284 286 290 270 Z" fill="#6C7480" opacity=".5"/>
+<ellipse cx="340" cy="326" rx="34" ry="44" fill="#5A616C"/>
+<circle cx="340" cy="336" r="19" fill="#1C1F24"/>
+<g class="core"><circle cx="340" cy="336" r="11" fill="#F2A65A"/><circle cx="340" cy="336" r="4.5" fill="#FBE3C4"/></g>
+<rect x="304" y="352" width="30" height="50" rx="15" fill="#5A616C"/><rect x="346" y="352" width="30" height="50" rx="15" fill="#5A616C"/>
+<ellipse cx="319" cy="402" rx="21" ry="10" fill="#6C7480"/><ellipse cx="361" cy="402" rx="21" ry="10" fill="#6C7480"/>
+<rect x="316" y="206" width="48" height="44" rx="10" fill="#1C1F24"/>
+<g class="ant"><path d="M340 104 L340 74" stroke="#5A616C" stroke-width="5" stroke-linecap="round"/><circle class="tip" cx="340" cy="70" r="7" fill="#F2A65A"/></g>
+<rect x="268" y="100" width="144" height="118" rx="54" fill="#454B55"/>
+<path d="M286 118 Q300 106 330 104" stroke="#6C7480" stroke-width="5" fill="none" stroke-linecap="round"/>
+<g class="earL"><path d="M296 112 Q258 110 252 150 Q248 192 270 200 Q288 182 296 140 Z" fill="#30353C"/><circle class="b" cx="266" cy="188" r="5" fill="#B388FF"/></g>
+<g class="earR"><path d="M384 112 Q422 110 428 150 Q432 192 410 200 Q392 182 384 140 Z" fill="#30353C"/><circle class="b d1" cx="414" cy="188" r="5" fill="#B388FF"/></g>
+<circle cx="312" cy="152" r="17" fill="#1C1F24"/><g class="eye"><circle cx="312" cy="152" r="8" fill="#B388FF"/><circle cx="314" cy="149" r="3" fill="#E2D4FF"/></g><circle cx="368" cy="152" r="17" fill="#1C1F24"/><g class="eye"><circle cx="368" cy="152" r="8" fill="#B388FF"/><circle cx="370" cy="149" r="3" fill="#E2D4FF"/></g>
+<ellipse cx="340" cy="192" rx="34" ry="22" fill="#5A616C"/>
+<rect x="328" y="178" width="24" height="14" rx="7" fill="#1C1F24"/>
+<path d="M330 204 Q340 210 350 204" stroke="#1C1F24" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
