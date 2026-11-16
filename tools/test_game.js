@@ -57,6 +57,20 @@ await p.click('#undo');await p.waitForTimeout(150);ok(await p.evaluate(()=>moves
 await click(p,'e7');await click(p,'e7');ok(await p.evaluate(()=>sel===-1),'tapping the selected piece again deselects it');
 await p.evaluate(()=>rebuild(['a2a4','b7b5','a4b5','a7a6','b5a6','h7h6','a6a7','h6h5']));await mv(p,'a7','b8','q');
 ok(await p.evaluate(()=>!!document.querySelector('#sheetBot .slot.promo[data-id="48"]')&&document.querySelectorAll('#sheetTop .slot.down').length===3),'promoted pawn is flagged on its own slot; three black losses shown');
+// realm pawns: each realm dresses its pawns in its own kit, and a pawn capture plays that kit's attack
+for(const [k,w,bk] of [['temporal','wp',null],['armada','armadawp','armadabp'],['dungeon','dungeonwp','dungeonbp'],['arcane','arcanewp','arcanebp']]){
+  await p.click(`[data-k=${k}]`);await p.click('[data-speed=full]');await p.evaluate(()=>{flipped=false;rebuild(['e2e4','d7d5']);});
+  const ks=await p.evaluate(()=>[pieceEls[52-16+0]&&0,pieceEls[36],pieceEls[27]].slice(1).map(e=>{const s=e.querySelector('svg.kit');return s?s.dataset.k:(e.querySelector('svg')?'rig':null)}));
+  ok(ks[0]===w&&(bk?ks[1]===bk:ks[1]==='rig'),`${k}: pawns use ${w} / ${bk||'robot pup'} (got ${ks})`);
+  await click(p,'e4');const sel=await p.evaluate(()=>[pieceEls[36].querySelector('svg.kit').dataset.s,squaresEl.className]);
+  ok(sel[0]==='selected'&&(k==='temporal'?/gold/.test(sel[1]):/kith/.test(sel[1])),`${k}: selected state and markers (${sel})`);
+  const seen=new Set();const t=setInterval(async()=>{try{(await p.evaluate(()=>[...document.querySelectorAll('#pieces svg.kit')].map(s=>s.dataset.k+':'+s.dataset.s))).forEach(x=>seen.add(x));}catch(e){}},90);
+  await click(p,'d5');await p.waitForTimeout(80);await idle(p);clearInterval(t);
+  ok(await p.evaluate(()=>sans.at(-1)==='exd5')&&await consistent(),`${k}: pawn capture battle completes`);
+  if(bk)ok(seen.has(w+':attack')&&seen.has(bk+':captured'),`${k}: attack and captured drawings play (${[...seen].join(' ')})`);
+  await p.evaluate(()=>rebuild(['a2a4','b7b5','a4b5','a7a6','b5a6','h7h6','a6a7','h6h5']));await mv(p,'a7','b8','q');
+  ok(await p.evaluate(()=>state.b[1]==='wq')&&await consistent(),`${k}: pawn promotes after a capture`);}
+ok(p.errs.length===0,'no page errors in realm pawn tests '+p.errs.slice(0,3).join(' | '));
 // theme switch + new game mid-battle
 await p.click('[data-speed=full]');await p.evaluate(()=>rebuild(['e2e4','d7d5']));
 await click(p,'e4');await click(p,'d5');await p.waitForTimeout(800);await p.click('[data-k=dungeon]');await p.click('#newGame');await idle(p);await p.waitForTimeout(300);

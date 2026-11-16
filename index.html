@@ -115,6 +115,8 @@ h1{font-family:var(--display);font-size:clamp(20px,4vw,30px);margin:0;letter-spa
 .dead .k-eye{display:none}.dead .k-shut{opacity:1}
 .squares.pup .sq.mv::before{background:radial-gradient(circle,#E2D4FF 0 41%,rgba(179,136,255,.85) 43%)}
 .squares.pup .sq.cp::before{background-image:var(--paw);animation:none}
+.squares.kith .sq.mv::before{background:var(--hmv) center/100% 100% no-repeat;inset:22%;border-radius:0}
+.squares.kith .sq.cp::before{background:var(--hcp) center/100% 100% no-repeat;animation:none}
 .squares.gold .sq.mv::before{background:radial-gradient(circle,#EAF7FF 0 41%,rgba(143,211,255,.85) 43%)}
 .squares.gold .sq.cp::before{background-image:var(--brkg)}
 .reticle.gold{background-image:var(--brkg);filter:drop-shadow(0 0 4px #F5C451)}
@@ -386,7 +388,7 @@ function mounted(P,s,tk){let o='';const rider=`<g transform="translate(-3,-17) s
   o+=g?`<path d="M38,-58 L47,-53 L38,-51Z" fill="#f2c94c" ${OL}/>`:`<path d="M14,-42 L22,-64" stroke="${P.hair}" stroke-width="4" stroke-linecap="round"/>`;
   return o;}
 /* Supplied artwork: drop-in figures that replace a generated rig. Key is side+piece (all realms) or realm+side+piece. */
-const CUSTOM={bp:{pounce:1,box:'135 20 410 430',h:92,attack:'strike',hints:'pup',beam:['rgba(179,136,255,.35)','#B388FF','#E2D4FF'],art:`<ellipse class="k-sh" cx="340" cy="436" rx="116" ry="9" fill="#000" opacity=".18"/><ellipse class="k-ring" cx="340" cy="434" rx="132" ry="16" fill="none" stroke="#B388FF" stroke-width="5"/><ellipse class="k-hit" cx="340" cy="434" rx="130" ry="18" fill="none" stroke="#B388FF" stroke-width="6"/><g class="k-lift"><g class="k-pounce"><g class="k-flames"><ellipse class="k-fl" style="animation-delay:0s" cx="274" cy="448" rx="9" ry="16" fill="#B388FF"/><ellipse class="k-fl" style="animation-delay:0s" cx="274" cy="444" rx="4" ry="9" fill="#E2D4FF"/><ellipse class="k-fl" style="animation-delay:0.1s" cx="340" cy="448" rx="9" ry="16" fill="#B388FF"/><ellipse class="k-fl" style="animation-delay:0.1s" cx="340" cy="444" rx="4" ry="9" fill="#E2D4FF"/><ellipse class="k-fl" style="animation-delay:0.2s" cx="406" cy="448" rx="9" ry="16" fill="#B388FF"/><ellipse class="k-fl" style="animation-delay:0.2s" cx="406" cy="444" rx="4" ry="9" fill="#E2D4FF"/></g><g class="k-tail"><path d="M392 372 Q430 360 428 318" stroke="#30353C" stroke-width="16" fill="none" stroke-linecap="round"/><circle class="k-tip" cx="428" cy="314" r="7" fill="#B388FF"/></g>
+const CUSTOM={temporalbp:{pounce:1,box:'135 20 410 430',h:92,attack:'strike',hints:'pup',beam:['rgba(179,136,255,.35)','#B388FF','#E2D4FF'],art:`<ellipse class="k-sh" cx="340" cy="436" rx="116" ry="9" fill="#000" opacity=".18"/><ellipse class="k-ring" cx="340" cy="434" rx="132" ry="16" fill="none" stroke="#B388FF" stroke-width="5"/><ellipse class="k-hit" cx="340" cy="434" rx="130" ry="18" fill="none" stroke="#B388FF" stroke-width="6"/><g class="k-lift"><g class="k-pounce"><g class="k-flames"><ellipse class="k-fl" style="animation-delay:0s" cx="274" cy="448" rx="9" ry="16" fill="#B388FF"/><ellipse class="k-fl" style="animation-delay:0s" cx="274" cy="444" rx="4" ry="9" fill="#E2D4FF"/><ellipse class="k-fl" style="animation-delay:0.1s" cx="340" cy="448" rx="9" ry="16" fill="#B388FF"/><ellipse class="k-fl" style="animation-delay:0.1s" cx="340" cy="444" rx="4" ry="9" fill="#E2D4FF"/><ellipse class="k-fl" style="animation-delay:0.2s" cx="406" cy="448" rx="9" ry="16" fill="#B388FF"/><ellipse class="k-fl" style="animation-delay:0.2s" cx="406" cy="444" rx="4" ry="9" fill="#E2D4FF"/></g><g class="k-tail"><path d="M392 372 Q430 360 428 318" stroke="#30353C" stroke-width="16" fill="none" stroke-linecap="round"/><circle class="k-tip" cx="428" cy="314" r="7" fill="#B388FF"/></g>
 <path d="M236 404 L232 424 Q340 446 448 424 L444 404 Z" fill="#1C1F24"/>
 <ellipse cx="340" cy="404" rx="104" ry="18" fill="#2F343B"/>
 <circle class="k-b" cx="274" cy="424" r="5.5" fill="#B388FF"/><circle class="k-b k-d1" cx="340" cy="432" r="5.5" fill="#B388FF"/><circle class="k-b k-d2" cx="406" cy="424" r="5.5" fill="#B388FF"/>
@@ -412,16 +414,23 @@ const CUSTOM={bp:{pounce:1,box:'135 20 410 430',h:92,attack:'strike',hints:'pup'
 const KITS=window.KITS||{};
 const KCFG={wp:{h:80,attack:'strike',ret:'gold',beam:['rgba(245,196,81,.35)','#F5C451','#FFF6D6']},
   wn:{h:104,atk:{dur:1400,hit:.55}},wr:{h:104,atk:{dur:1400,hit:.6,ranged:1}},
-  wq:{h:112,atk:{dur:1600,hit:.57,ranged:1}},wk:{h:118,atk:{dur:1500,hit:.47,ranged:1}}};
+  wq:{h:112,atk:{dur:1600,hit:.57,ranged:1}},wk:{h:118,atk:{dur:1500,hit:.47,ranged:1}},
+  // realm pawns (art/<realm>-<side>-pawn, drawn by tools/make_realm_pawns.py); Temporal keeps the P-1 pawn and the pup
+  armadawp:{h:86,atk:{dur:1300,hit:.55,ranged:1}},armadabp:{h:86,atk:{dur:1300,hit:.55,ranged:1}},
+  dungeonwp:{h:86,atk:{dur:1300,hit:.58}},dungeonbp:{h:86,atk:{dur:1300,hit:.56}},
+  arcanewp:{h:86,atk:{dur:1400,hit:.57,ranged:1}},arcanebp:{h:86,atk:{dur:1400,hit:.57,ranged:1}}};
+const KIT_HINTS=window.KIT_HINTS||{};
 if(window.KIT_CSS){const st=document.createElement('style');st.textContent=window.KIT_CSS;document.head.append(st);}
-const kitOf=p=>KITS[p]&&KCFG[p]?p:null;
-const cfgOf=p=>CUSTOM[themeKey+p]||CUSTOM[p]||(kitOf(p)?KCFG[p]:null);
+// Kit for a piece in a realm: a realm's own kit (e.g. 'armadawp') wins over the all-realm kit ('wp').
+const kitOf=(p,tk=themeKey)=>[tk+p,p].find(k=>KITS[k]&&KCFG[k])||null;
+const cfgOf=p=>CUSTOM[themeKey+p]||(kitOf(p)?KCFG[kitOf(p)]:CUSTOM[p]||null);
 function kst(el,state){const k=el&&el.querySelector('svg.kit');if(!k)return;const kit=KITS[k.dataset.k],st=kit[state]?state:'idle';
   if(k.dataset.s===st)return;k.dataset.s=st;k.innerHTML=kit[st];}
 const svgCache={};
 function charSVG(tk,piece){const key=tk+piece;if(svgCache[key])return svgCache[key];
-  if(kitOf(piece)){const c=KCFG[piece],w=c.h*410/430;
-    return svgCache[key]=`<svg viewBox="-42 -120 84 126" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><svg class="kit" data-k="${piece}" data-s="idle" x="${-w/2}" y="${-c.h+2}" width="${w}" height="${c.h}" viewBox="135 20 410 430" overflow="visible">${KITS[piece].idle}</svg></svg>`;}
+  const kk=kitOf(piece,tk);
+  if(kk){const c=KCFG[kk],w=c.h*410/430;
+    return svgCache[key]=`<svg viewBox="-42 -120 84 126" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><svg class="kit" data-k="${kk}" data-s="idle" x="${-w/2}" y="${-c.h+2}" width="${w}" height="${c.h}" viewBox="135 20 410 430" overflow="visible">${KITS[kk].idle}</svg></svg>`;}
   const cu=CUSTOM[tk+piece]||CUSTOM[piece];
   if(cu){const [,,bw,bh]=cu.box.split(' ').map(Number),w=cu.h*bw/bh;
     return svgCache[key]=`<svg viewBox="-42 -120 84 126" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><g class="rig"><svg x="${-w/2}" y="${-cu.h+2}" width="${w}" height="${cu.h}" viewBox="${cu.box}" overflow="visible">${cu.art}</svg></g></svg>`;}
@@ -511,7 +520,9 @@ const boardEl=$('board'),squaresEl=$('squares'),piecesEl=$('pieces');
 const disp=sq=>{const [r,f]=rf(sq);return flipped?{x:7-f,y:7-r}:{x:f,y:r};};
 let pieceEls={};
 function render(){
-  squaresEl.textContent='';{const sp0=sel>=0&&state.b[sel],c0=sp0&&(CUSTOM[themeKey+sp0]||CUSTOM[sp0]);squaresEl.classList.toggle('pup',!!(c0&&c0.hints==='pup'));squaresEl.classList.toggle('gold',!!(sp0&&kitOf(sp0)));}
+  squaresEl.textContent='';{const sp0=sel>=0&&state.b[sel],c0=sp0&&(CUSTOM[themeKey+sp0]||CUSTOM[sp0]);const k0=sp0&&kitOf(sp0),h0=k0&&KIT_HINTS[k0];
+    squaresEl.classList.toggle('pup',!!(c0&&c0.hints==='pup'));squaresEl.classList.toggle('gold',!!(k0&&!h0));squaresEl.classList.toggle('kith',!!h0);
+    if(h0){squaresEl.style.setProperty('--hmv',h0.move);squaresEl.style.setProperty('--hcp',h0.capture);}}
   const chk=!result||result.type==='mate'?(inCheck(state,state.turn)?state.b.indexOf(state.turn+'k'):-1):-1;
   for(let y=0;y<8;y++)for(let x=0;x<8;x++){
     const sq=flipped?idx(7-y,7-x):idx(y,x),[r,f]=rf(sq),d=document.createElement('div');
