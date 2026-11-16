@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="140 40 400 400" width="400" height="400" role="img"><title>Capture target marker</title><style>
+.ant{transform-origin:398px 108px;animation:wig 2.4s ease-in-out infinite}
+.scan{animation:scan var(--scan,1.8s) ease-in-out infinite alternate}
+.b{animation:blink 1.2s steps(1) infinite}
+.d1{animation-delay:.4s}.d2{animation-delay:.8s}
+.tip{animation:blink 1.6s steps(1) infinite}
+.core{transform-origin:340px 336px;animation:pulse 2s ease-in-out infinite}
+@keyframes wig{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}}
+@keyframes scan{from{transform:translateX(0)}to{transform:translateX(62px)}}
+@keyframes blink{0%,55%{opacity:1}56%,100%{opacity:.18}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.h{animation:blink 1s steps(1) infinite}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style><path class="h" d="M160 130 L160 60 L230 60" stroke="#F5C451" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path class="h" d="M520 130 L520 60 L450 60" stroke="#F5C451" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path class="h" d="M160 350 L160 420 L230 420" stroke="#F5C451" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path class="h" d="M520 350 L520 420 L450 420" stroke="#F5C451" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>

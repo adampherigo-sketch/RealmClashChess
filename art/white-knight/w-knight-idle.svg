@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="135 20 410 430" width="410" height="430" role="img"><title>White robot knight idle</title><style>
+.plume{transform-origin:340px 92px;animation:plume 2.6s ease-in-out infinite}
+.scan{animation:scan var(--scan,1.8s) ease-in-out infinite alternate}
+.sword{transform-origin:256px 300px}
+.arm{transform-origin:270px 226px;animation:idlearm 3s ease-in-out infinite}
+.glint{animation:glint 2.4s ease-in-out infinite}
+.b{animation:blink 1.2s steps(1) infinite}.d1{animation-delay:.4s}.d2{animation-delay:.8s}
+.core{transform-origin:340px 258px;animation:pulse 2s ease-in-out infinite}
+@keyframes plume{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(8deg)}}
+@keyframes scan{from{transform:translateX(0)}to{transform:translateX(50px)}}
+@keyframes idlearm{0%,100%{transform:rotate(0)}50%{transform:rotate(-4deg)}}
+@keyframes glint{0%,60%{transform:translateY(130px);opacity:0}65%{opacity:1}90%{transform:translateY(0);opacity:1}100%{transform:translateY(0);opacity:0}}
+@keyframes blink{0%,55%{opacity:1}56%,100%{opacity:.18}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style><ellipse cx="340" cy="436" rx="116" ry="9" fill="#000" opacity=".18"/>
+<path d="M236 404 L232 424 Q340 446 448 424 L444 404 Z" fill="#8A6A2E"/>
+<ellipse cx="340" cy="404" rx="104" ry="18" fill="#C29A4E"/>
+<circle class="b" cx="274" cy="424" r="5.5" fill="#8FD3FF"/><circle class="b d1" cx="340" cy="432" r="5.5" fill="#8FD3FF"/><circle class="b d2" cx="406" cy="424" r="5.5" fill="#8FD3FF"/>
+<path d="M284 304 L264 402 Q340 418 416 402 L396 304 Z" fill="#FBFAF6"/>
+<path d="M284 304 L264 402 Q280 406 296 408 L304 304 Z" fill="#E6DECF"/>
+<path d="M340 312 L340 412 M310 312 L300 408 M370 312 L380 408" stroke="#D8CDB8" stroke-width="2"/>
+<rect x="280" y="294" width="120" height="16" rx="6" fill="#8A6A2E"/>
+<rect x="332" y="292" width="16" height="20" rx="4" fill="#C29A4E"/>
+<path d="M288 214 Q340 200 392 214 L402 296 Q340 308 278 296 Z" fill="#FBFAF6"/>
+<path d="M288 214 Q300 210 312 207 L304 298 Q290 298 278 296 Z" fill="#E6DECF"/>
+<path d="M300 236 Q340 226 380 236" stroke="#D8CDB8" stroke-width="2" fill="none"/>
+<circle cx="340" cy="258" r="18" fill="#3A2E1E"/>
+<g class="core"><circle cx="340" cy="258" r="10" fill="#F5C451"/><circle cx="340" cy="258" r="4" fill="#FFF6D6"/></g>
+<rect x="316" y="194" width="48" height="22" rx="8" fill="#3A2E1E"/>
+<g class="plume"><path d="M340 92 Q372 54 412 70 Q392 76 386 92 Q378 84 364 96 Q356 90 340 100 Z" fill="#8FD3FF"/></g>
+<rect x="292" y="96" width="96" height="108" rx="40" fill="#FBFAF6"/>
+<path d="M298 120 Q300 104 318 98 L312 200 Q298 192 294 170 Z" fill="#E6DECF"/>
+<rect x="333" y="84" width="14" height="38" rx="6" fill="#C29A4E"/>
+<rect x="300" y="138" width="80" height="24" rx="10" fill="#3A2E1E"/>
+<rect x="308" y="146" width="64" height="8" rx="4" fill="#2E6A8C"/>
+<rect class="scan" x="308" y="146" width="14" height="8" rx="4" fill="#EAF7FF"/>
+<path d="M340 166 L340 196" stroke="#D8CDB8" stroke-width="3"/>
+<circle class="b" cx="314" cy="182" r="3.5" fill="#8FD3FF"/><circle class="b d1" cx="366" cy="182" r="3.5" fill="#8FD3FF"/>
+<ellipse cx="412" cy="224" rx="30" ry="19" fill="#C29A4E"/>
+<path d="M412 232 L422 290" stroke="#E6DECF" stroke-width="20" stroke-linecap="round"/>
+<path d="M394 252 L472 252 L470 300 Q466 340 433 364 Q400 340 396 300 Z" fill="#FBFAF6" stroke="#C29A4E" stroke-width="6" stroke-linejoin="round"/>
+<path d="M410 280 L433 316 L456 280" stroke="#8FD3FF" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<circle class="b d2" cx="433" cy="336" r="6" fill="#8FD3FF"/>
+<g class="arm">
+ <ellipse cx="268" cy="224" rx="30" ry="19" fill="#C29A4E"/>
+ <path d="M266 232 L256 292" stroke="#E6DECF" stroke-width="20" stroke-linecap="round"/>
+ <g class="sword">
+ <path d="M250 290 L250 158 L256 136 L262 158 L262 290 Z" fill="#EEF8FF" stroke="#8FD3FF" stroke-width="2.5" stroke-linejoin="round"/>
+ <path d="M256 152 L256 284" stroke="#8FD3FF" stroke-width="2" opacity=".7"/>
+ <clipPath id="bl"><path d="M250 290 L250 158 L256 136 L262 158 L262 290 Z"/></clipPath><rect class="glint" clip-path="url(#bl)" x="248" y="150" width="16" height="22" fill="#FFFFFF" opacity=".9"/>
+ <rect x="234" y="288" width="44" height="9" rx="4.5" fill="#8A6A2E"/>
+ <rect x="251" y="296" width="10" height="20" rx="3" fill="#3A2E1E"/>
+ <circle cx="256" cy="320" r="6" fill="#C29A4E"/>
+ </g>
+ <circle cx="256" cy="300" r="12" fill="#C29A4E"/>
+</g>
+</svg>

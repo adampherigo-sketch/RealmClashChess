@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="135 20 410 430" width="410" height="430" role="img"><title>Unit P-1 white pawn captured</title><ellipse cx="340" cy="436" rx="116" ry="9" fill="#000" opacity=".18"/><g transform="rotate(-12 340 434)" opacity=".8">
+<g transform="rotate(48 398 108)">
+ <path d="M398 108 L420 72" stroke="#C29A4E" stroke-width="5" stroke-linecap="round"/>
+ <circle cx="422" cy="68" r="8" fill="#7A6C60"/>
+</g>
+<circle cx="398" cy="108" r="10" fill="#C29A4E"/>
+<path d="M236 404 L232 424 Q340 446 448 424 L444 404 Z" fill="#8A6A2E"/>
+<ellipse cx="340" cy="404" rx="104" ry="18" fill="#C29A4E"/>
+<circle cx="274" cy="424" r="5.5" fill="#5A6675"/>
+<circle cx="340" cy="432" r="5.5" fill="#5A6675"/>
+<circle cx="406" cy="424" r="5.5" fill="#5A6675"/>
+<path d="M290 230 Q300 330 256 402 Q340 422 424 402 Q380 330 390 230 Z" fill="#FBFAF6"/>
+<path d="M340 232 L340 416" stroke="#D8CDB8" stroke-width="2"/>
+<path d="M298 300 Q340 310 382 300" stroke="#D8CDB8" stroke-width="2" fill="none"/>
+<path d="M280 360 Q340 374 400 360" stroke="#D8CDB8" stroke-width="2" fill="none"/>
+<path d="M290 230 Q300 330 256 402 Q272 408 290 411 Q312 330 304 230 Z" fill="#E6DECF"/>
+<circle cx="340" cy="336" r="20" fill="#8A6A2E"/>
+<g><circle cx="340" cy="336" r="12" fill="#7A6C60"/><circle cx="340" cy="336" r="5" fill="#9A8E84"/></g>
+<rect x="276" y="212" width="128" height="24" rx="12" fill="#8A6A2E"/>
+<rect x="290" y="219" width="12" height="10" rx="3" fill="#5A6675"/>
+<rect x="378" y="219" width="12" height="10" rx="3" fill="#5A6675"/>
+<circle cx="340" cy="150" r="66" fill="#FBFAF6"/>
+<path d="M296 104 A66 66 0 0 0 296 196 A80 80 0 0 1 296 104 Z" fill="#E6DECF"/>
+<rect x="286" y="138" width="108" height="26" rx="13" fill="#3A2E1E"/>
+<rect x="300" y="146" width="80" height="10" rx="5" fill="#3A4552"/>
+
+<path d="M312 104 Q340 92 368 104" stroke="#FFFFFF" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>
+</g></svg>
