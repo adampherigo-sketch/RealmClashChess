@@ -149,8 +149,34 @@ button.btn,.promo button,.field button{font-family:var(--body);font-weight:600;f
 button.btn.pri{background:var(--accent);border-color:var(--accent);color:#111}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 button:disabled{opacity:.5;cursor:not-allowed}
-.caps{display:flex;justify-content:space-between;gap:10px;min-height:24px;font-size:18px;color:var(--muted)}
-.caps span{letter-spacing:-.05em}
+.pbar{display:flex;align-items:center;gap:8px;padding:6px 10px;min-height:36px;border:1px solid var(--line);border-radius:8px;background:var(--panel);font-size:14px;transition:border-color .2s}
+.pbar .dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--line);transition:background .2s,box-shadow .2s}
+.pbar.on{border-color:var(--accent)} .pbar.on .dot{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.pbar b{font-family:var(--display);letter-spacing:.03em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pbar .tag{flex:none;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent) 28%,transparent)}
+.pbar .tag:empty,.pbar .mat:empty{display:none}
+.pbar .tag.warn{background:#e5484d;color:#fff}
+.pbar .grow{flex:1}
+.pbar .mat{color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums}
+.pbar .alive{flex:none;color:var(--muted);font-variant-numeric:tabular-nums}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.sheet h3{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.sheet .sname{color:var(--fg)} .sheet .count{letter-spacing:.04em;text-transform:none}
+.roster{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+.slot{position:relative;aspect-ratio:3/4;padding:0;border:1px solid var(--line);border-radius:6px;cursor:pointer;overflow:hidden;
+  background:color-mix(in srgb,var(--sqL) 82%,#fff)}
+.slot .mini{position:absolute;inset:2px 0 13px;width:auto;height:auto;pointer-events:none}
+.slot .mini *{animation:none!important}
+.slot i{position:absolute;left:0;right:0;bottom:1px;font:600 10px var(--body);color:var(--fg);opacity:.8;text-align:center}
+.slot.down{border-color:#e5484d99;background:color-mix(in srgb,var(--sqD) 50%,var(--panel))}
+.slot.down .mini{filter:grayscale(1) brightness(.7);opacity:.4}
+.slot.down::after{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent 46.5%,#e5484d 47.5% 52.5%,transparent 53.5%)}
+.slot.promo{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.slot.pick{outline:2px solid var(--accent);outline-offset:1px}
+.sheet .who{min-height:2.9em}
+.moves span.cur{color:var(--accent);font-weight:600}
+@media (hover:hover){.board:not(.locked) .sq:hover{box-shadow:inset 0 0 0 .45cqw color-mix(in srgb,var(--accent) 75%,transparent)}}
+.board.locked{cursor:default}
 section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
 section h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -164,8 +190,6 @@ section h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.12em
 .note{color:var(--muted);font-size:13px;margin:0}
 .moves{max-height:190px;overflow:auto;display:grid;grid-template-columns:2.4em 1fr 1fr;gap:2px 8px;font-variant-numeric:tabular-nums;font-size:14px}
 .moves b{color:var(--muted);font-weight:400}
-.cast{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13.5px;margin:0;align-items:center}
-.cast dt{display:flex;gap:2px} .cast dt .mini{width:30px;height:38px} .cast dd{margin:0;color:var(--fg)}
 @media (prefers-reduced-motion:reduce){.rig,.arm.l,.wing,.glw,.hov{animation:none}}
 </style>
 
@@ -179,14 +203,19 @@ section h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.12em
   <div class="main">
     <div class="stage">
       <div class="status" id="status"></div>
-      <div class="caps"><span id="capTop"></span></div>
+      <div class="pbar" id="barTop"><span class="dot"></span><b class="pn"></b><span class="tag"></span><span class="grow"></span><span class="mat"></span><span class="alive"></span></div>
       <div class="frame"><div class="board" id="board">
         <div class="squares" id="squares"></div>
         <div class="pieces" id="pieces"></div>
         <canvas class="fx" id="fx"></canvas>
         <div class="callout" id="callout"></div>
       </div></div>
-      <div class="caps"><span id="capBot"></span></div>
+      <div class="pbar" id="barBot"><span class="dot"></span><b class="pn"></b><span class="tag"></span><span class="grow"></span><span class="mat"></span><span class="alive"></span></div>
+      <div class="tools">
+        <button class="btn" id="undo">Undo move</button>
+        <button class="btn" id="flip">Flip board</button>
+        <button class="btn" id="newGame">New game</button>
+      </div>
     </div>
 
     <div class="side">
@@ -197,8 +226,6 @@ section h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.12em
             <button id="modeLocal" aria-pressed="true">Same device</button>
             <button id="modeOnline" aria-pressed="false">Two devices</button>
           </div>
-          <button class="btn" id="newGame">New game</button>
-          <button class="btn" id="flip">Flip board</button>
         </div>
         <div id="onlineBox" hidden>
           <div id="lobby">
@@ -227,9 +254,15 @@ section h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.12em
         </div>
       </section>
 
-      <section>
-        <h3 id="castTitle">Cast</h3>
-        <dl class="cast" id="cast"></dl>
+      <section class="sheet" id="sheetTop">
+        <h3><span class="sname"></span><span class="count"></span></h3>
+        <div class="roster"></div>
+        <p class="note who" aria-live="polite"></p>
+      </section>
+      <section class="sheet" id="sheetBot">
+        <h3><span class="sname"></span><span class="count"></span></h3>
+        <div class="roster"></div>
+        <p class="note who" aria-live="polite"></p>
       </section>
 
       <section>
@@ -447,7 +480,12 @@ function outcome(s){const ms=legal(s);
   return null;}
 
 /* ───────────── Game state ───────────── */
-let state=initial(), moves=[], sans=[], captured={w:[],b:[]}, lastMove=null, result=null;
+let state=initial(), moves=[], sans=[], lastMove=null, result=null;
+// Identity of every starting piece (its start square), so the character sheets know exactly who fell.
+const START=initial().b, VAL={p:1,n:3,b:3,r:5,q:9,k:0};
+const ROSTER={w:[60,59,56,63,58,61,57,62,48,49,50,51,52,53,54,55],b:[4,3,0,7,2,5,1,6,8,9,10,11,12,13,14,15]};
+let ids=START.map((p,i)=>p?i:-1), fallen=[], promoted={}, reps={};
+const posKey=s=>s.b.map(x=>x||'-').join('')+s.turn+s.castle.wK+s.castle.wQ+s.castle.bK+s.castle.bQ+s.ep;
 let sel=-1, selMoves=[], flipped=false, themeKey='temporal', speed='full', soundOn=true, busy=0;
 let mode='local';
 const T=()=>THEMES[themeKey];
@@ -456,9 +494,15 @@ function san(s,m,after){if(m.castle)return m.castle==='K'?'O-O':'O-O-O';
   const t=m.piece[1];let x=(t==='p'?(m.cap>=0?sqName(m.from)[0]:''):t.toUpperCase())+(m.cap>=0?'x':'')+sqName(m.to)+(m.promo?'='+m.promo.toUpperCase():'');
   const o=outcome(after);return x+(o&&o.type==='mate'?'#':inCheck(after,after.turn)?'+':'');}
 function record(m){const prev=state,next=applyMove(prev,m);
-  if(m.cap>=0)captured[prev.turn].push(prev.b[m.cap]);
-  sans.push(san(prev,m,next));moves.push(toUci(m));state=next;lastMove=m;result=outcome(next);return prev;}
-function rebuild(list){state=initial();moves=[];sans=[];captured={w:[],b:[]};lastMove=null;result=null;
+  const who=ids[m.from];
+  if(m.cap>=0){fallen.push({id:ids[m.cap],piece:prev.b[m.cap],by:m.piece,ply:moves.length+1});ids[m.cap]=-1;}
+  ids[m.from]=-1;ids[m.to]=who;if(m.promo)promoted[who]=m.promo;
+  if(m.castle){const row=m.from>>3,a=idx(row,m.castle==='K'?7:0),b=idx(row,m.castle==='K'?5:3);ids[b]=ids[a];ids[a]=-1;}
+  sans.push(san(prev,m,next));moves.push(toUci(m));state=next;lastMove=m;result=outcome(next);
+  const k=posKey(next);reps[k]=(reps[k]||0)+1;if(!result&&reps[k]>=3)result={type:'draw',why:'Same position three times'};
+  return prev;}
+function rebuild(list){state=initial();moves=[];sans=[];lastMove=null;result=null;
+  ids=START.map((p,i)=>p?i:-1);fallen=[];promoted={};reps={[posKey(state)]:1};
   for(const u of list){const m=findUci(state,u);if(!m)break;record(m);}
   sel=-1;selMoves=[];render();}
 
@@ -491,14 +535,39 @@ function renderInfo(){
   if(result)h=result.type==='mate'?`Checkmate. ${side(result.winner)} win`:`Draw <small>${result.why}</small>`;
   else{h=`${side(state.turn)} to move`;
     if(inCheck(state,state.turn))h+=' <small>Check</small>';
-    if(mode==='online'&&net.code)h+=` <small>${net.color?(net.color===state.turn?'Your turn':'Waiting for opponent'):'Watching'}</small>`;}
+    if(mode==='online'&&net.code)h+=` <small>${net.color?(net.color===state.turn?'Your turn':'Waiting for opponent'):'Watching'}</small>`;
+    if(sel>=0&&state.b[sel])h+=` <small>${pname(state.b[sel])}: ${selMoves.length} move${selMoves.length===1?'':'s'}</small>`;}
   $('status').innerHTML=h;
-  const glyphs=c=>captured[c].map(p=>GLYPH[p[1]]).join('');
-  $('capTop').textContent=glyphs(flipped?'b':'w');$('capBot').textContent=glyphs(flipped?'w':'b');
+  const mat=c=>state.b.reduce((n,p)=>n+(p&&p[0]===c?VAL[p[1]]:0),0),alive=c=>state.b.filter(p=>p&&p[0]===c).length;
+  for(const[c,el]of[[flipped?'w':'b',$('barTop')],[flipped?'b':'w',$('barBot')]]){const o=c==='w'?'b':'w',d=mat(c)-mat(o),tag=el.querySelector('.tag');
+    el.classList.toggle('on',!result&&state.turn===c);el.querySelector('.pn').textContent=side(c);
+    const won=result&&result.type==='mate'&&result.winner===c,chk=!result&&state.turn===c&&inCheck(state,c);
+    tag.textContent=won?'Winner':result&&result.type==='mate'?'Checkmated':result?'Draw':chk?'In check':mode==='online'&&net.code&&net.color===c?'You':'';
+    tag.classList.toggle('warn',!!chk||(!!result&&result.type==='mate'&&!won));
+    el.querySelector('.mat').textContent=d>0?'+'+d:'';el.querySelector('.alive').textContent=alive(c)+'/16';}
+  $('undo').disabled=!!busy||mode!=='local'||!moves.length;
+  boardEl.classList.toggle('locked',!canMove());
+  renderSheets();
   const mv=$('moves');mv.textContent='';
   for(let i=0;i<sans.length;i+=2){const n=document.createElement('b');n.textContent=(i/2+1)+'.';const a=document.createElement('span');a.textContent=sans[i];const b=document.createElement('span');b.textContent=sans[i+1]||'';mv.append(n,a,b);}
+  if(mv.lastElementChild)(sans.length%2?mv.lastElementChild.previousElementSibling:mv.lastElementChild).className='cur';
   mv.scrollTop=mv.scrollHeight;
   showResult();}
+// Character sheets: one slot per starting piece; fallen ones are struck out, promoted pawns show their new form.
+let sheetSig='';
+const slotName=id=>{const p=START[id],t=p[1];return T().names[t]+(t==='p'?` (${'abcdefgh'[id&7]}-file)`:'rbn'.includes(t)?((id&7)<4?' (queenside)':' (kingside)'):'');};
+function slotText(id){const f=fallen.find(x=>x.id===id),pt=promoted[id];
+  return slotName(id)+(pt?', promoted to '+T().names[pt]:'')+(f?`: taken on move ${Math.ceil(f.ply/2)} by ${T().sides[f.by[0]]}' ${T().names[f.by[1]]}.`:': still standing.');}
+function renderSheets(){const sig=[themeKey,flipped,fallen.map(f=>f.id),JSON.stringify(promoted)].join('|');if(sig===sheetSig)return;sheetSig=sig;
+  for(const[c,el]of[[flipped?'w':'b',$('sheetTop')],[flipped?'b':'w',$('sheetBot')]]){
+    const down=fallen.filter(f=>f.piece[0]===c),gone=new Set(down.map(f=>f.id));
+    el.querySelector('.sname').textContent=T().sides[c];el.querySelector('.count').textContent=`${16-down.length} of 16 standing`;
+    el.querySelector('.roster').innerHTML=ROSTER[c].map(id=>{const t=START[id][1],pt=promoted[id];
+      return `<button class="slot${gone.has(id)?' down':''}${pt?' promo':''}" data-id="${id}" aria-label="${slotText(id)}"><span class="mini"${c==='b'?' style="--face:-1"':''}>${charSVG(themeKey,c+(pt||t))}</span><i>${t==='p'?'abcdefgh'[id&7]:t.toUpperCase()}</i></button>`;}).join('');
+    const tally={};down.forEach(f=>{const n=T().names[START[f.id][1]];tally[n]=(tally[n]||0)+1;});
+    el.querySelector('.who').textContent=down.length?'Fallen: '+Object.entries(tally).map(([n,k])=>k>1?`${n} ×${k}`:n).join(', ')+'. Tap a character for details.':'No losses yet. Tap a character for its name.';}}
+for(const id of['sheetTop','sheetBot'])$(id).addEventListener('click',e=>{const b=e.target.closest('.slot');if(!b)return;
+  $(id).querySelectorAll('.pick').forEach(x=>x.classList.remove('pick'));b.classList.add('pick');$(id).querySelector('.who').textContent=slotText(+b.dataset.id);});
 function showResult(){let o=boardEl.querySelector('.overlay.end');
   if(!result||busy){if(o)o.remove();return;}
   if(o)return;o=document.createElement('div');o.className='overlay end';
@@ -507,8 +576,6 @@ function showResult(){let o=boardEl.querySelector('.overlay.end');
 function applyTheme(k){themeKey=k;const t=T(),st=document.documentElement.style;
   for(const[key,v]of Object.entries(t.css))st.setProperty('--'+key,v);
   document.querySelectorAll('#themes button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
-  $('castTitle').textContent=`Cast: ${t.sides.w} vs ${t.sides.b}`;
-  $('cast').innerHTML='kqrbnp'.split('').map(c=>`<dt><span class="mini">${charSVG(k,'w'+c)}</span><span class="mini" style="--face:-1">${charSVG(k,'b'+c)}</span></dt><dd>${t.names[c]}</dd>`).join('');
   try{localStorage.setItem('rcc-theme',k);}catch(e){}
   if(busy)renderInfo();else render();}
 
@@ -662,17 +729,23 @@ function canMove(){return !busy&&!result&&(mode==='local'||(net.code&&net.color=
 function choosePromo(color){return new Promise(res=>{const o=document.createElement('div');o.className='overlay';
   o.innerHTML=`<div class="card"><p>Promote to</p><div class="promo">${'qrbn'.split('').map(c=>`<button data-p="${c}" aria-label="${T().names[c]}"><span class="mini" style="pointer-events:none">${charSVG(themeKey,color+c)}</span></button>`).join('')}</div></div>`;
   o.onclick=e=>{e.stopPropagation();const b=e.target.closest('button');o.remove();res(b?b.dataset.p:null);};boardEl.append(o);});}
-boardEl.addEventListener('click',async e=>{
-  if(e.target.closest('.overlay'))return;
-  const r=boardEl.getBoundingClientRect(),x=Math.min(7,Math.max(0,Math.floor((e.clientX-r.left)/r.width*8))),y=Math.min(7,Math.max(0,Math.floor((e.clientY-r.top)/r.height*8)));
-  const sq=flipped?idx(7-y,7-x):idx(y,x);if(!canMove())return;
-  const opts=selMoves.filter(m=>m.to===sq);
-  if(opts.length){let m=opts[0];
-    if(opts.length>1){const p=await choosePromo(state.turn);if(!p)return;m=opts.find(o=>o.promo===p);}
-    enqueue(()=>play(m,mode==='online'));return;}
+const sqAt=e=>{const r=boardEl.getBoundingClientRect(),x=Math.min(7,Math.max(0,Math.floor((e.clientX-r.left)/r.width*8))),y=Math.min(7,Math.max(0,Math.floor((e.clientY-r.top)/r.height*8)));
+  return flipped?idx(7-y,7-x):idx(y,x);};
+const deselect=()=>{if(sel<0)return;sel=-1;selMoves=[];render();};
+async function tryMove(sq){const opts=selMoves.filter(m=>m.to===sq);if(!opts.length)return false;let m=opts[0];
+  if(opts.length>1){const p=await choosePromo(state.turn);if(!p)return true;m=opts.find(o=>o.promo===p);}
+  if(canMove())enqueue(()=>play(m,mode==='online'));return true;}
+// Tap a piece then a square, or (with a mouse) press on a piece and release on its destination.
+let downSq=-1,wasSel=false;
+boardEl.addEventListener('pointerdown',async e=>{if(e.button>0||e.target.closest('.overlay'))return;const sq=sqAt(e);downSq=-1;if(!canMove())return;
+  if(await tryMove(sq))return;
   const p=state.b[sq];
-  if(p&&p[0]===state.turn&&sq!==sel){sel=sq;selMoves=legal(state).filter(m=>m.from===sq);}else{sel=-1;selMoves=[];}
-  render();});
+  if(p&&p[0]===state.turn){wasSel=sq===sel;downSq=sq;if(!wasSel){sel=sq;selMoves=legal(state).filter(m=>m.from===sq);render();}}
+  else deselect();});
+boardEl.addEventListener('pointerup',async e=>{if(downSq<0||e.target.closest('.overlay'))return;const sq=sqAt(e),d=downSq;downSq=-1;if(!canMove())return;
+  if(sq===d){if(wasSel)deselect();return;}
+  if(e.pointerType==='mouse'&&sel===d)await tryMove(sq);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')deselect();});
 function newGame(){
   if(mode==='online'&&net.doc){if(!net.color)return;
     net.doc.update({moves:[],round:(net.round||0)+1,white:net.data.black,black:net.data.white}).catch(e=>netMsg('Could not start a new game.'));return;}
@@ -724,6 +797,7 @@ $('leave').onclick=()=>{leave();enqueue(()=>rebuild([]));};
 for(const k of Object.keys(THEMES)){const b=document.createElement('button');b.textContent=THEMES[k].label;b.dataset.k=k;b.onclick=()=>applyTheme(k);$('themes').append(b);}
 $('modeLocal').onclick=()=>setMode('local');$('modeOnline').onclick=()=>setMode('online');
 $('newGame').onclick=newGame;
+$('undo').onclick=()=>{if(busy||mode!=='local'||!moves.length)return;enqueue(()=>rebuild(moves.slice(0,-1)));};
 $('flip').onclick=()=>{if(busy)return;flipped=!flipped;render();};
 document.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{speed=b.dataset.speed;document.querySelectorAll('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',x===b));});
 $('sound').onclick=()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'Sound on':'Sound off';$('sound').setAttribute('aria-pressed',soundOn);};
